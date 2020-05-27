@@ -1,0 +1,20 @@
+apply {
+    plugin 'java-platform'
+}
+
+dependencies {
+
+    api platform ('project.platformerror:stamm-platform:' + stammversion)
+
+    api platform ('project.platformerror:guistamm-platform:' + guistammversion)
+
+    //api platform ('project.platformerror:stamm-platform:20.4-SNAPSHOT-2005271139') //wenn die dazukommt, dann gehts
+
+
+    // Eigene Module
+    constraints {
+        api project(':guirecherche-model')
+    }
+}
+
+javaPlatform.allowDependencies()

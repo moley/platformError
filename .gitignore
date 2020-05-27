@@ -1,0 +1,17 @@
+build
+buildgen
+out
+__MACOSX
+.settings
+.classpath
+.project
+.gradle/
+*.iml
+*.iws
+*.ipr
+*.log
+bin
+out
+*.hprof
+.idea
+ModulVersion.properties

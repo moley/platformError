@@ -1,0 +1,84 @@
+import java.time.format.DateTimeFormatter
+import java.time.Duration
+def formatter = DateTimeFormatter.ofPattern("yyMMddhhmm")
+def time = LocalDateTime.now()
+def versionStamm1 = "20.4-SNAPSHOT-" + time.format (formatter)
+def versionStamm2 = "20.4-SNAPSHOT-" + time.plus(Duration.ofMinutes(1)).format(formatter)
+def versionGuistamm = "20.4-SNAPSHOT-" + time.plus(Duration.ofMinutes(2)).format(formatter)
+
+println "Stamm1: " + versionStamm1
+println "Stamm2: " + versionStamm2
+println "GuiStamm: " + versionGuistamm
+
+
+
+
+//Cleaning
+task cleanStammOld(type: GradleBuild) {
+    buildFile = 'stamm/build.gradle'
+    tasks = ['clean']
+    startParameter.projectProperties = [version: versionStamm1]
+}
+
+task cleanStammNew(type: GradleBuild) {
+    buildFile = 'stammnew/build.gradle'
+    tasks = ['clean']
+    startParameter.projectProperties = [version: versionStamm2]
+    dependsOn cleanStammOld
+}
+
+task cleanGuiStamm(type: GradleBuild) {
+    buildFile = 'guistamm/build.gradle'
+    tasks = ['clean']
+    startParameter.projectProperties = [version: versionGuistamm, stammversion:versionStamm2]
+    dependsOn cleanStammNew
+}
+
+
+
+//Building releases, bug reproduction
+task uploadStammOld(type: GradleBuild) {
+    buildFile = 'stamm/build.gradle'
+    tasks = ['publish']
+    startParameter.projectProperties = [version: versionStamm1]
+}
+
+task uploadStammNew(type: GradleBuild) {
+    buildFile = 'stammnew/build.gradle'
+    tasks = ['publish']
+    startParameter.projectProperties = [version: versionStamm2]
+    dependsOn uploadStammOld
+}
+
+task uploadGuiStamm(type: GradleBuild) {
+    buildFile = 'guistamm/build.gradle'
+    tasks = ['publish']
+    startParameter.projectProperties = [version: versionGuistamm, stammversion:versionStamm2]
+    dependsOn uploadStammNew
+}
+
+
+//resolving the guirecherche project with an old stamm version, is NOK
+task resolveDependenciesGuiRechercheFails (type: GradleBuild) {
+    buildFile = 'guirecherche/build.gradle'
+    tasks = [':guirecherche-model:dep']
+    startParameter.projectProperties = [stammversion:versionStamm1, guistammversion: versionGuistamm]
+    dependsOn uploadGuiStamm
+}
+
+//resolving the guirecherche project with a new stamm version, is OK
+task resolveDependenciesGuiRechercheOk (type: GradleBuild) {
+    buildFile = 'guirecherche/build.gradle'
+    tasks = [':guirecherche-model:dep']
+    startParameter.projectProperties = [stammversion:versionStamm2, guistammversion: versionGuistamm]
+    dependsOn uploadGuiStamm
+}
+
+// clean all projects
+task cleanAll(type: GradleBuild) {
+    buildFile = 'guirecherche/build.gradle'
+    tasks = ['clean']
+    startParameter.projectProperties = [stammversion:versionStamm2, guistammversion: versionGuistamm]
+    dependsOn cleanGuiStamm
+}
+

@@ -1,0 +1,3 @@
+include 'stamm-model'
+include 'stamm-platform'
+rootProject.name = 'stamm'

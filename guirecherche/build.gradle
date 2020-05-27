@@ -1,0 +1,16 @@
+allprojects {
+  repositories {
+    maven { url 'http://localhost/artifactory/libs-release-local' }
+  }
+  group = 'project.platformerror'
+  apply {
+    plugin 'maven-publish'
+  }
+
+  project.plugins.withId('java') {
+    dependencies {
+      implementation platform(project (':guirecherche-platform'))
+    }
+  }
+}
+

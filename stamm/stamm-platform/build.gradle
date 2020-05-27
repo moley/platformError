@@ -1,0 +1,25 @@
+apply {
+    plugin 'java-platform'
+    plugin 'maven-publish'
+}
+
+dependencies {
+    constraints {
+        api project(':stamm-model')
+    }
+}
+
+publishing {
+    repositories {
+        maven {
+            url = "http://localhost/artifactory/libs-release-local"
+        }
+    }
+    publications {
+        maven(MavenPublication) {
+            from components.javaPlatform
+        }
+    }
+}
+
+javaPlatform.allowDependencies()

@@ -1,0 +1,14 @@
+allprojects {
+  repositories {
+    maven { url 'http://localhost/artifactory/libs-release-local' }
+  }
+  group = 'project.platformerror'
+
+
+  project.plugins.withId('java') {
+    dependencies {
+      implementation platform(project (':stamm-platform'))
+    }
+  }
+}
+

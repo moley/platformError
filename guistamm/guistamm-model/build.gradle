@@ -1,0 +1,20 @@
+apply {
+  plugin 'java-library'
+  plugin 'maven-publish'
+}
+dependencies {
+  api 'project.platformerror:stamm-model'
+}
+
+publishing {
+  repositories {
+    maven {
+      url = "http://localhost/artifactory/libs-release-local"
+    }
+  }
+  publications {
+    maven(MavenPublication) {
+      from components.java
+    }
+  }
+}

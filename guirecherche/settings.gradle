@@ -1,0 +1,3 @@
+include 'guirecherche-model'
+include 'guirecherche-platform'
+rootProject.name = 'guirecherche'
