@@ -1,4 +1,4 @@
-#Bug scenario
+# Bug scenario
 
 We have the problem that in a special combination of platforms which extend each other we run in a bug, which is
 an error in resolving dependencies.
